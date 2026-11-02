@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    background-color: #F8F2E8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+main {
+    flex-grow: 1;
+}
+
+
+h1, h2, h3, h4, nav a {
+    color: #49382E
+}
+
+p {
+    color: #635145
+}
+
+article {
+    background-color: #FFFDF9;
+}
+
+footer {
+    background-color: hsl(19, 34%, 21%);
+    display:flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+footer p {
+        color: #F8F2E8
+}
+
+section a {
+    background-color: #6F4D38;
+    color: #FFFFFF;
+    padding: 0.6rem 2.5rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+
+}
+
+header {
+    background-color: #FFFDF9;
+    padding: 0.8rem 4rem;
+}
+
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+nav {
+    display: flex;
+    gap:1rem
+}
+
+a {
+    text-decoration: none;
+}
+
+.hero {
+    padding: 4rem;
+    background-color: #E8DDCA;
+}
+
+.hero p {
+    margin: 1rem 0 1.5rem;
+}
+
+.featured-books {
+    padding: 2rem 4rem;
+}
+
+.featured-books-container {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+
+.featured-books-card {
+    border: 3px solid #49382E;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    margin-top: 1rem;
+}
+
+.why-acereads {
+    background-color: #E8DDCA;
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    
+}
+
+.why-acereads-content {
+    margin-left: 2rem;
+}
+
+.all-books-container {
+    padding-left: 4rem;
+    padding-top: 0.5rem;
+}
+
+.all-books-container p {
+    margin-top: 1rem;
+}
+
+.all-books-list {
+    padding: 2rem;
+}

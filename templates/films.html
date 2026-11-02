@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>📚 AceReads</h1>
+            <nav>
+        <a href="/">Home</a>
+        <a href="/books">Books</a>
+        <a href="/films">Films</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <h1>Most popular films</h1>
+        <ul>
+            {% for film in films %}
+            <li>{{film.title}} - {{film.release_year}}</li>
+            {% endfor %}
+        </ul>
+</body>
+</html>
