@@ -1,17 +1,24 @@
+
 name: Deploy to EC2
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types:
+      - completed
+    branches: [main]
 
 jobs:
   build-and-deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main' }}
     runs-on: ubuntu-latest
     environment: prod
 
     steps:
       - name: Check out
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Copy app to EC2
         uses: appleboy/scp-action@v0.1.4
@@ -20,7 +27,7 @@ jobs:
           username: "ec2-user"
           port: 22
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "./Dockerfile, ./*.py, ./requirements.txt, ./seeds, ./templates, ./static"
+          source: "./Dockerfile,./*.py,./lib,./requirements.txt,./seeds,./templates,./static"
           target: ~/book_store
 
       - name: Ensure Docker network exists
@@ -51,7 +58,7 @@ jobs:
                 -e POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}' \
                 -e POSTGRES_DB='book_store' \
                 -d postgres:17
-              docker exec -i book_store_db psql -U postgres -d book_store < ~/book_store/seeds/books.sql
+              docker exec -i book_store_db psql -U '${{ secrets.POSTGRES_USER }}' -d book_store < ~/book_store/seeds/books.sql
             fi
 
       - name: Build Docker image
