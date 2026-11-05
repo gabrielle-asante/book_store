@@ -10,8 +10,16 @@ CREATE TABLE IF NOT EXISTS films (
     release_year INT
 );
 
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(100),
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
 TRUNCATE table books;
 TRUNCATE table films;
+TRUNCATE table users;
 
 INSERT INTO books (title, author) VALUES ('The Gruffalo', 'Julia Donaldson');
 INSERT INTO books (title, author) VALUES ('Ada Twist, Scientist', 'Andrea Beaty');

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from lib.database_connection import DatabaseConnection
 from lib.book_repository import BookRepository
 from lib.book import Book
@@ -8,8 +8,12 @@ from lib.film_repository import FilmRepository
 from lib.user_repository import UserRepository
 from lib.user import User
 
+from login_required import login_required
+
 # instantiate a Flask app object
 app = Flask(__name__)
+
+app.secret_key = "some_really_secret_key"
 
 
 # NEW PART START
@@ -91,19 +95,11 @@ def books():
     return render_template("books.html", books= books)
 
 
-# @app.route('/books', methods=['POST'])
-# def create_book():
-#     book_details = request.json
-#     print(book_details)
-#     return "created", 201
-
-# @app.route('/books/new', methods=['GET'])
-# def get_new_book_page():
-#     return render_template('new-book.html')
-
 
 @app.route('/books', methods=['POST'])
+@login_required
 def create_new_book():
+    
     connection = DatabaseConnection()
     connection.connect()
 
@@ -138,9 +134,34 @@ def create_user():
     connection.connect()
     user_repository = UserRepository(connection)
     user_details = request.form
-    user = User(username=user_details["username"], password=user_details["password"])
+    user = User(email= user_details["email"], username=user_details["username"], password=user_details["password"])
     user_repository.create(user)
     return redirect("/books")
+
+
+@app.route('/sessions/new', methods=['GET'])
+def get_login_page():
+    return render_template("login_form.html")
+
+
+@app.route('/sessions', methods=['POST'])
+def create_session():
+    connection = DatabaseConnection()
+    connection.connect()
+
+    user_repository = UserRepository(connection)
+
+    username = request.form['username']
+    password = request.form['password']
+
+    user = user_repository.find_by_username(username) 
+
+    if user and user.password == password:
+        session['user_id'] = user.id 
+        session["username"] = user.username
+        return redirect("/books")
+    else:
+        return redirect("/sessions/new")
 
 
 # make the server run in response to `python app.py`

@@ -18,7 +18,8 @@ def test_create_user_is_saved_to_database():
     # send the request
     response = client.post('/users', data={
         'username': 'testuser',
-        'password': 'password123'
+        'password': 'password123',
+        'email':'test_email@example.com'
     })
 
     # assert that the redirect happened
@@ -31,3 +32,30 @@ def test_create_user_is_saved_to_database():
     assert len(result) == 1
     assert result[0]['username'] == 'testuser'
 
+def test_user_email_address_is_saved_to_database():
+    # create the test client to send requests without using Playwright and a browser
+    client = app.test_client()
+
+    # set up a DB connection
+    connection = DatabaseConnection()
+    connection.connect()
+
+    # use execute to send a TRUNCATE TABLE query
+    connection.execute("TRUNCATE TABLE users;")
+    
+    # send the request
+    response = client.post('/users', data={
+        'username': 'testuser',
+        'password': 'password123',
+        'email':'test_email@example.com'
+    })
+
+    # assert that the redirect happened
+    assert response.status_code == 302
+
+    # read from the DB
+    result = connection.execute("SELECT * FROM users WHERE email='test_email@example.com'")
+
+    # assert that the user was created
+    assert len(result) == 1
+    assert result[0]['email'] == 'test_email@example.com'

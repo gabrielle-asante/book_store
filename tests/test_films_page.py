@@ -1,6 +1,12 @@
 from playwright.sync_api import Page, expect 
+from lib.database_connection import DatabaseConnection
 
 def test_page_displays_all_films(page: Page):
+
+    connection = DatabaseConnection()
+    connection.connect()
+    connection.seed("./seeds/books.sql")
+
     page.goto("http://localhost:5001/films")
 
     films = page.locator("li")
